@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WORLD CORE | Virtual Spaces</title>
+<style>
+:root {
+  --bg:#080b18; --panel:#12182b; --line:#2a3554;
+  --gold:#f0ca76; --blue:#5de2ff; --muted:#aab5d0;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0; background:var(--bg); color:#f5f7ff;
+  font-family:Arial,sans-serif;
+}
+header {
+  display:flex; align-items:center; justify-content:space-between;
+  gap:16px; flex-wrap:wrap; padding:18px 5%;
+  background:#101629; border-bottom:1px solid var(--line);
+}
+.logo { color:var(--gold); font-weight:800; letter-spacing:2px; }
+nav { display:flex; gap:16px; flex-wrap:wrap; }
+a { color:var(--blue); text-decoration:none; }
+main { width:90%; max-width:1100px; margin:auto; }
+.hero { text-align:center; padding:44px 0 28px; }
+.hero h1 { font-size:clamp(30px,6vw,48px); margin:12px 0; }
+.hero p,.muted { color:var(--muted); line-height:1.6; }
+.layout {
+  display:grid; grid-template-columns:1fr 1fr; gap:20px;
+  align-items:start; margin-bottom:35px;
+}
+.panel {
+  background:var(--panel); border:1px solid var(--line);
+  border-radius:16px; padding:20px; min-width:0;
+}
+label { display:block; margin:14px 0 7px; font-size:14px; }
+input,textarea,select {
+  width:100%; padding:12px; border-radius:9px;
+  border:1px solid #394563; background:#090f20;
+  color:white; font:inherit;
+}
+textarea { min-height:85px; resize:vertical; }
+button {
+  cursor:pointer; padding:12px 15px; border:0;
+  border-radius:9px; font-weight:700;
+  background:linear-gradient(100deg,var(--gold),#fff0bc);
+  color:#171523;
+}
+button.secondary {
+  background:#202b45; color:white; border:1px solid #394563;
+}
+button.danger { background:#47252f; color:#fff; }
+.actions { display:flex; gap:9px; flex-wrap:wrap; margin-top:15px; }
+.room {
+  min-height:245px; padding:20px; border-radius:13px;
+  display:flex; flex-direction:column; justify-content:space-between;
+  overflow:hidden; border:1px solid #647294;
+  background:radial-gradient(ellipse at 50% 30%,#244e80,#10152b 65%);
+}
+.room.gold { background:radial-gradient(ellipse at 50% 30%,#806330,#211a2b 70%); }
+.room.purple { background:radial-gradient(ellipse at 50% 30%,#673b91,#151329 70%); }
+.room.green { background:radial-gradient(ellipse at 50% 30%,#176b61,#101b2a 70%); }
+.orb {
+  width:78px; height:78px; border-radius:50%; align-self:center;
+  border:2px solid #a4edff; box-shadow:0 0 35px #49d9ff88;
+  display:grid; place-items:center; font-size:28px;
+}
+.room h3 { margin:15px 0 6px; overflow-wrap:anywhere; }
+.room p { color:#e0e7f8; line-height:1.5; overflow-wrap:anywhere; }
+.badge {
+  display:inline-block; border:1px solid #60718d; border-radius:30px;
+  padding:5px 9px; font-size:12px; width:max-content;
+}
+.public-grid {
+  display:grid; grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:15px; margin:20px 0 45px;
+}
+.public-card {
+  background:var(--panel); border:1px solid var(--line);
+  border-radius:13px; padding:13px; min-width:0;
+}
+.public-card .room { min-height:160px; padding:12px; }
+.public-card .orb { width:48px; height:48px; font-size:20px; }
+.public-card h3 { overflow-wrap:anywhere; }
+.status { color:var(--gold); min-height:20px; line-height:1.5; }
+.note { color:var(--muted); font-size:12px; line-height:1.6; }
+footer { padding:25px; text-align:center; color:var(--muted); border-top:1px solid var(--line); }
+@media(max-width:760px) {
+  .layout { grid-template-columns:1fr; }
+  .public-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+@media(max-width:420px) {
+  .public-grid { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">◆ WORLD CORE</div>
+  <nav>
+    <a href="index.html">Museum</a>
+    <a href="gallery.html">NFT Gallery</a>
+    <a href="spaces.html">Virtual Spaces</a>
+  </nav>
+</header>
+
+<main>
+  <section class="hero">
+    <p style="color:var(--gold);letter-spacing:2px">YOUR WORLD. YOUR SPACE.</p>
+    <h1>Personal <span style="color:var(--blue)">Virtual Spaces</span></h1>
+    <p>Create your own digital room, customize its look, and choose
+    whether to list it in the public spaces directory.</p>
+  </section>
+
+  <div class="layout">
+    <section class="panel">
+      <h2>Create Your Room</h2>
+      <p class="muted">Customize your personal space below.</p>
+
+      <form id="roomForm">
+        <label for="owner">Display name</label>
+        <input id="owner" maxlength="40" required placeholder="Your display name">
+
+        <label for="roomName">Room name</label>
+        <input id="roomName" maxlength="60" required placeholder="My Digital World">
+
+        <label for="bio">Room description</label>
+        <textarea id="bio" maxlength="240" placeholder="Tell visitors about your room..."></textarea>
+
+        <label for="theme">Room theme</label>
+        <select id="theme">
+          <option value="blue">Cosmic Blue</option>
+          <option value="gold">Royal Gold</option>
+          <option value="purple">Neon Purple</option>
+          <option value="green">Emerald World</option>
+        </select>
+
+        <label for="visibility">Room visibility</label>
+        <select id="visibility">
+          <option value="private">Private — don't list publicly</option>
+          <option value="public">Public — show in directory</option>
+        </select>
+
+        <div class="actions">
+          <button type="submit">Save My Room</button>
+          <button class="secondary" type="button" id="resetBtn">Clear Form</button>
+        </div>
+      </form>
+      <p class="note">Prototype only: room data stays in this browser.
+      Private mode hides the room from this page's public directory;
+      it does not provide secure access control.</p>
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+    </section>
+
+    <section class="panel">
+      <h2>My Virtual Room</h2>
+      <p class="muted">Your saved room preview on this device.</p>
+      <div id="myRoom">
+        <div class="room"><span class="badge">NOT CREATED</span>
+          <div class="orb">✦</div>
+          <div><h3>Your room will appear here</h3>
+          <p>Create your room using the form.</p></div>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="secondary" id="editBtn" type="button">Edit Room</button>
+        <button class="danger" id="deleteBtn" type="button">Delete Room</button>
+      </div>
+    </section>
+  </div>
+
+  <section>
+    <h2>Public Spaces</h2>
+    <p class="muted">Rooms marked public on this browser appear here.</p>
+    <div id="publicSpaces" class="public-grid"></div>
+    <p id="emptyMessage" class="muted">No public rooms saved on this device yet.</p>
+  </section>
+</main>
+
+<footer>© 2026 WORLD CORE · The Connection of All Crypto</footer>
+
+<script>
+(() => {
+  const ROOM_KEY = "worldcore_virtual_room_v1";
+  const PUBLIC_KEY = "worldcore_public_rooms_v1";
+  const $ = id => document.getElementById(id);
+  const form = $("roomForm");
+  let room = null;
+
+  function read(key, fallback) {
+    try {
+      const value = JSON.parse(localStorage.getItem(key));
+      return value ?? fallback;
+    } catch (_) {
+      return fallback;
+    }
+  }
+
+  function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, ch => ({
+      "&":"&amp;", "<":"&lt;", ">":"&gt;",
+      '"':"&quot;", "'":"&#39;"
+    })[ch]);
+  }
+
+  function roomMarkup(item, label) {
+    const themes = ["blue","gold","purple","green"];
+    const theme = themes.includes(item.theme) ? item.theme : "blue";
+    const visibility = item.visibility === "public" ? "PUBLIC" : "PRIVATE";
+    return `<div class="room ${theme}">
+      <span class="badge">${label || visibility}</span>
+      <div class="orb">✦</div>
+      <div>
+        <h3>${escapeHTML(item.roomName)}</h3>
+        <p>Created by ${escapeHTML(item.owner)}</p>
+        <p>${escapeHTML(item.bio || "Welcome to my WORLD CORE space.")}</p>
+      </div>
+    </div>`;
+  }
+
+  function render() {
+    room = read(ROOM_KEY, null);
+    $("myRoom").innerHTML = room
+      ? roomMarkup(room, room.visibility === "public" ? "PUBLIC ROOM" : "PRIVATE ROOM")
+      : `<div class="room"><span class="badge">NOT CREATED</span>
+          <div class="orb">✦</div><div><h3>Your room will appear here</h3>
+          <p>Create your room using the form.</p></div></div>`;
+
+    const rooms = read(PUBLIC_KEY, []);
+    const publicRooms = Array.isArray(rooms) ? rooms : [];
+    $("publicSpaces").innerHTML = publicRooms.length
+      ? publicRooms.map((item, index) => `
+        <article class="public-card">
+          ${roomMarkup(item, "PUBLIC SPACE")}
+          <button class="secondary visitBtn" data-index="${index}" type="button">
+            View Room
+          </button>
+        </article>`).join("")
+      : "";
+    $("emptyMessage").hidden = publicRooms.length > 0;
+  }
+
+  function fillForm(item) {
+    $("owner").value = item?.owner || "";
+    $("roomName").value = item?.roomName || "";
+    $("bio").value = item?.bio || "";
+    $("theme").value = item?.theme || "blue";
+    $("visibility").value = item?.visibility || "private";
+  }
+
+  function savePublicRoom(item) {
+    const rooms = read(PUBLIC_KEY, []);
+    const list = Array.isArray(rooms) ? rooms : [];
+    const updated = list.filter(r => r.id !== item.id);
+    if (item.visibility === "public") updated.unshift(item);
+    localStorage.setItem(PUBLIC_KEY, JSON.stringify(updated.slice(0, 50)));
+  }
+
+  form.addEventListener("submit", event => {
+    event.preventDefault();
+    try {
+      const oldRoom = read(ROOM_KEY, null);
+      room = {
+        id: oldRoom?.id || (Date.now().toString(36) + Math.random().toString(36).slice(2, 8)),
+        owner: $("owner").value.trim(),
+        roomName: $("roomName").value.trim(),
+        bio: $("bio").value.trim(),
+        theme: $("theme").value,
+        visibility: $("visibility").value
+      };
+      if (!room.owner || !room.roomName) {
+        $("status").textContent = "Enter your display name and room name.";
+        return;
+      }
+      localStorage.setItem(ROOM_KEY, JSON.stringify(room));
+      savePublicRoom(room);
+      $("status").textContent = "Room saved in this browser!";
+      render();
+    } catch (_) {
+      $("status").textContent = "Could not save. Check browser storage settings.";
+    }
+  });
+
+  $("editBtn").addEventListener("click", () => {
+    const saved = read(ROOM_KEY, null);
+    if (!saved) {
+      $("status").textContent = "Create a room first.";
+      return;
+    }
+    fillForm(saved);
+    $("status").textContent = "Edit your details and save again.";
+    form.scrollIntoView({behavior:"smooth", block:"start"});
+  });
+
+  $("deleteBtn").addEventListener("click", () => {
+    if (!read(ROOM_KEY, null)) {
+      $("status").textContent = "There is no saved room to delete.";
+      return;
+    }
+    if (!confirm("Delete your room from this browser?")) return;
+    const old = read(ROOM_KEY, null);
+    localStorage.removeItem(ROOM_KEY);
+    const rooms = read(PUBLIC_KEY, []);
+    localStorage.setItem(PUBLIC_KEY, JSON.stringify(
+      (Array.isArray(rooms) ? rooms : []).filter(r => r.id !== old.id)
+    ));
+    form.reset();
+    $("status").textContent = "Room deleted from this browser.";
+    render();
+  });
+
+  $("resetBtn").addEventListener("click", () => {
+    form.reset();
+    $("status").textContent = "Form cleared. Your saved room is unchanged.";
+  });
+
+  $("publicSpaces").addEventListener("click", event => {
+    const button = event.target.closest(".visitBtn");
+    if (!button) return;
+    const rooms = read(PUBLIC_KEY, []);
+    const item = Array.isArray(rooms) ? rooms[Number(button.dataset.index)] : null;
+    if (!item) return;
+    alert(item.roomName + "\nBy " + item.owner + "\n\n" +
+      (item.bio || "Welcome to this virtual space.") +
+      "\n\nThis is a local demo preview, not an online room.");
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
