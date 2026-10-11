@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Firebase Auth Demo</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; max-width: 400px; }
+    input { display: block; width: 100%; margin-bottom: 10px; padding: 8px; }
+    button { padding: 8px 15px; margin-right: 5px; cursor: pointer; }
+    #status { margin-top: 20px; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+  <h2>Firebase Authentication</h2>
+  
+  <input type="email" id="email" placeholder="Email Address">
+  <input type="password" id="password" placeholder="Password">
+  
+  <button id="registerBtn">Register</button>
+  <button id="loginBtn">Login</button>
+  <button id="logoutBtn" style="display: none;">Logout</button>
+
+  <p id="status">Loading...</p>
+
+  <!-- Link to your external JS file -->
+  <script type="module" src="app.js"></script>
+</body>
+</html>
