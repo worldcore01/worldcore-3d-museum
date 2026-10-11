@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WORLD CORE | NFT Gallery</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #080b1b;
+      color: #fff;
+    }
+    header {
+      padding: 20px 6%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      background: #11152c;
+      border-bottom: 1px solid #30375c;
+    }
+    .logo {
+      color: #62e8ff;
+      font-weight: bold;
+      letter-spacing: 3px;
+    }
+    a { color: #62e8ff; text-decoration: none; }
+    .hero { text-align: center; padding: 55px 5% 30px; }
+    .hero h1 { font-size: clamp(32px, 7vw, 58px); margin: 12px 0; }
+    .hero p { color: #b3bad7; line-height: 1.7; }
+    .accent { color: #62e8ff; }
+    .tools {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 25px auto;
+      max-width: 650px;
+    }
+    input, select {
+      min-width: 0;
+      width: 50%;
+      padding: 13px;
+      border-radius: 8px;
+      border: 1px solid #343b65;
+      background: #141932;
+      color: white;
+    }
+    main { max-width: 1200px; width: 90%; margin: auto; }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+      margin: 25px 0 40px;
+    }
+    .card {
+      overflow: hidden;
+      border-radius: 15px;
+      background: #131832;
+      border: 1px solid #2b3258;
+    }
+    .art {
+      aspect-ratio: 1 / 1;
+      display: grid;
+      place-items: center;
+      font-size: 85px;
+    }
+    .one { background: radial-gradient(circle, #7049bd, #17172f); }
+    .two { background: radial-gradient(circle, #158a9c, #10172e); }
+    .three { background: radial-gradient(circle, #b44d8e, #26152f); }
+    .four { background: radial-gradient(circle, #a98236, #201b32); }
+    .five { background: radial-gradient(circle, #268b71, #10192e); }
+    .six { background: radial-gradient(circle, #5269cf, #17162f); }
+    .info { padding: 17px; }
+    .info h3 { margin: 8px 0; }
+    .info p { color: #b3bad7; font-size: 14px; }
+    .tag { font-size: 11px; color: #62e8ff; letter-spacing: 1.5px; }
+    button {
+      cursor: pointer;
+      border: 0;
+      border-radius: 8px;
+      padding: 12px 15px;
+      font-weight: bold;
+      background: linear-gradient(100deg, #62e8ff, #a58bff);
+      color: #080b1b;
+    }
+    .info button { width: 100%; margin-top: 8px; }
+    .notice {
+      color: #e8d59a;
+      font-size: 13px;
+      line-height: 1.7;
+      margin-bottom: 35px;
+    }
+    footer {
+      text-align: center;
+      color: #b3bad7;
+      border-top: 1px solid #30375c;
+      padding: 25px;
+    }
+    @media(max-width: 700px) {
+      .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+      .info { padding: 12px; }
+      .art { font-size: 60px; }
+      .tools { flex-wrap: wrap; }
+      input, select { width: 100%; }
+    }
+    @media(max-width: 360px) {
+      .gallery { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">◆ WORLD CORE</div>
+  <nav>
+    <a href="index.html">3D Museum</a>
+    &nbsp; | &nbsp;
+    <a href="gallery.html">NFT Gallery</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <p class="tag">THE CONNECTION OF ALL CRYPTO</p>
+  <h1>WORLD CORE <span class="accent">NFT Gallery</span></h1>
+  <p>Explore digital art and discover the WORLD CORE universe.</p>
+  <div class="tools">
+    <input id="search" type="search" placeholder="Search artwork...">
+    <select id="filter">
+      <option value="all">All categories</option>
+      <option value="cosmic">Cosmic</option>
+      <option value="nature">Nature</option>
+      <option value="artifact">Artifact</option>
+    </select>
+  </div>
+</section>
+
+<main>
+  <h2>Featured Collectibles</h2>
+  <p style="color:#b3bad7">Discover our sample digital collection.</p>
+
+  <section class="gallery" id="gallery">
+
+    <article class="card" data-name="Cosmic Genesis" data-category="cosmic">
+      <div class="art one">🌌</div>
+      <div class="info">
+        <span class="tag">COSMIC</span>
+        <h3>Cosmic Genesis</h3>
+        <p>Creator: WorldCore Studio</p>
+        <button onclick="details('Cosmic Genesis','A concept artwork inspired by the digital universe.')">View Details</button>
+      </div>
+    </article>
+
+    <article class="card" data-name="Neon Guardian" data-category="artifact">
+      <div class="art two">🛡️</div>
+      <div class="info">
+        <span class="tag">ARTIFACT</span>
+        <h3>Neon Guardian</h3>
+        <p>Creator: Core Collective</p>
+        <button onclick="details('Neon Guardian','A digital concept representing trust and community.')">View Details</button>
+      </div>
+    </article>
+
+    <article class="card" data-name="Aurora Bloom" data-category="nature">
+      <div class="art three">🌺</div>
+      <div class="info">
+        <span class="tag">NATURE</span>
+        <h3>Aurora Bloom</h3>
+        <p>Creator: Luma Atelier</p>
+        <button onclick="details('Aurora Bloom','Colorful concept art inspired by light and nature.')">View Details</button>
+      </div>
+    </article>
+
+    <article class="card" data-name="Golden Relic" data-category="artifact">
+      <div class="art four">🏆</div>
+      <div class="info">
+        <span class="tag">ARTIFACT</span>
+        <h3>Golden Relic</h3>
+        <p>Creator: WorldCore Studio</p>
+        <button onclick="details('Golden Relic','A fictional collectible from the WorldCore universe.')">View Details</button>
+      </div>
+    </article>
+
+    <article class="card" data-name="Ocean Memory" data-category="nature">
+      <div class="art five">🐚</div>
+      <div class="info">
+        <span class="tag">NATURE</span>
+        <h3>Ocean Memory</h3>
+        <p>Creator: Blue Current</p>
+        <button onclick="details('Ocean Memory','Concept art inspired by mysterious ocean worlds.')">View Details</button>
+      </div>
+    </article>
+
+    <article class="card" data-name="Prism Voyager" data-category="cosmic">
+      <div class="art six">🔮</div>
+      <div class="info">
+        <span class="tag">COSMIC</span>
+        <h3>Prism Voyager</h3>
+        <p>Creator: Core Collective</p>
+        <button onclick="details('Prism Voyager','A fictional crystal from a distant digital dimension.')">View Details</button>
+      </div>
+    </article>
+
+  </section>
+
+  <p class="notice">
+    IMPORTANT: These are sample artworks for demonstration.
+    They are not verified or minted NFTs. Wallet connection,
+    NFT minting, and blockchain transactions are not enabled yet.
+  </p>
+  <p><a href="index.html">← Return to WORLD CORE 3D Museum</a></p>
+</main>
+
+<footer>© 2026 WORLD CORE | The Connection of All Crypto</footer>
+
+<script>
+  const search = document.getElementById('search');
+  const filter = document.getElementById('filter');
+  const cards = document.querySelectorAll('.card');
+
+  function applyFilters() {
+    const term = search.value.toLowerCase().trim();
+
+    cards.forEach(card => {
+      const name = card.dataset.name.toLowerCase();
+      const category = card.dataset.category;
+      const matchName = name.includes(term);
+      const matchCategory =
+        filter.value === 'all' || filter.value === category;
+
+      card.style.display =
+        matchName && matchCategory ? '' : 'none';
+    });
+  }
+
+  function details(title, description) {
+    alert(title + '\n\n' + description +
+      '\n\nDemo artwork only. Not yet verified on-chain.');
+  }
+
+  search.addEventListener('input', applyFilters);
+  filter.addEventListener('change', applyFilters);
+</script>
+
+</body>
+</html>
