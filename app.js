@@ -1,64 +1,81 @@
-// Import Firebase SDKs from CDN
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { 
   getAuth, 
   createUserWithEmailAndPassword, 
   signInWithEmailAndPassword, 
+  signInWithPopup, 
+  GoogleAuthProvider, 
   signOut, 
   onAuthStateChanged 
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-// TODO: Replace with your actual Firebase config keys from the console
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
+  apiKey: "AIzaSyDrdHMW5P1eRHucO5lQvOKIlacoxneKcz4",
   authDomain: "circle-developer-console.firebaseapp.com",
+  databaseURL: "https://circle-developer-console-default-rtdb.firebaseio.com",
   projectId: "circle-developer-console",
-  storageBucket: "circle-developer-console.appspot.com",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  storageBucket: "circle-developer-console.firebasestorage.app",
+  messagingSenderId: "904118916433",
+  appId: "1:904118916433:web:bf128d705e2993ddf2af70",
+  measurementId: "G-1GGM55J84K"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const googleProvider = new GoogleAuthProvider();
 
 const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
 const statusText = document.getElementById("status");
-const logoutBtn = document.getElementById("logoutBtn");
 
-// Monitor Auth state (displays logged-in user or updates UI)
+// DETECTION & REDIRECT CODE
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    statusText.textContent = `Logged in as: ${user.email}`;
-    logoutBtn.style.display = "inline-block";
+    statusText.innerHTML = "Access Granted! <br>Redirecting to 3D Museum... 🚀";
+    
+    // Smooth 1.5-second transition delay before redirecting
+    setTimeout(() => {
+      window.location.href = "https://worldcore-3d-museum.vercel.app/";
+    }, 1500);
   } else {
-    statusText.textContent = "Not logged in.";
-    logoutBtn.style.display = "none";
+    statusText.textContent = "Please sign in to continue.";
   }
 });
 
-// Register User
+// Email Registration
 document.getElementById("registerBtn").addEventListener("click", async () => {
   try {
     await createUserWithEmailAndPassword(auth, emailInput.value, passwordInput.value);
-    alert("Registration successful!");
   } catch (error) {
-    alert("Error: " + error.message);
+    alert("Registration Error: " + error.message);
   }
 });
 
-// Login User
+// Email Login
 document.getElementById("loginBtn").addEventListener("click", async () => {
   try {
     await signInWithEmailAndPassword(auth, emailInput.value, passwordInput.value);
-    alert("Logged in successfully!");
   } catch (error) {
-    alert("Error: " + error.message);
+    alert("Login Error: " + error.message);
   }
 });
 
-// Logout User
-logoutBtn.addEventListener("click", () => {
-  signOut(auth).catch((error) => alert(error.message));
+// Google Sign-In
+document.getElementById("googleBtn").addEventListener("click", async () => {
+  try {
+    await signInWithPopup(auth, googleProvider);
+  } catch (error) {
+    alert("Google Sign-in Error: " + error.message);
+  }
 });
