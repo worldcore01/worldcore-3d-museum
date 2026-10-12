@@ -2,141 +2,57 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Premium 3D Experience</title>
-  <style>
-    :root {
-      --bg: #0b0f19;
-      --card-bg: rgba(21, 32, 54, 0.7);
-      --primary: #3b82f6;
-      --accent: #10b981;
-      --text: #f8fafc;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background: radial-gradient(circle at top, #1e1b4b, var(--bg));
-      color: var(--text);
-      font-family: system-ui, -apple-system, sans-serif;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-    
-    /* 3D Scene Wrapper */
-    .scene {
-      perspective: 1200px;
-    }
-
-    /* 3D Glassmorphic Card */
-    .card {
-      background: var(--card-bg);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 28px;
-      padding: 40px;
-      width: 380px;
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.1);
-      
-      /* Allows children to live in actual 3D space */
-      transform-style: preserve-3d;
-      transform: rotateX(8deg) rotateY(-8deg);
-      transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.5s ease;
-    }
-    
-    .card:hover {
-      transform: rotateX(0deg) rotateY(0deg) translateY(-8px);
-      box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6), 0 0 40px rgba(59, 130, 246, 0.15);
-    }
-
-    /* Floating depth layers using translateZ */
-    h2 {
-      font-size: 1.8rem;
-      margin-bottom: 24px;
-      text-align: center;
-      background: linear-gradient(to right, #60a5fa, #34d399);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      transform: translateZ(50px); /* Floats the highest */
-      text-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
-    }
-    
-    .input-wrapper {
-      transform: translateZ(25px); /* Floats above the card base */
-      margin-bottom: 16px;
-    }
-
-    input {
-      width: 100%;
-      padding: 14px 16px;
-      background: rgba(15, 23, 42, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      color: var(--text);
-      font-size: 1rem;
-      outline: none;
-      transition: all 0.2s ease;
-    }
-    input:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
-    }
-
-    .btn-container {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 15px;
-      transform: translateZ(35px); /* Floats in the middle layer */
-    }
-    
-    button {
-      flex: 1;
-      padding: 14px;
-      border: none;
-      border-radius: 12px;
-      font-size: 0.95rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    .btn-primary { background: var(--primary); color: white; }
-    .btn-accent { background: var(--accent); color: white; }
-    
-    .btn-google {
-      width: 100%;
-      background: white;
-      color: #0f172a;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      transform: translateZ(35px); /* Floats in the middle layer */
-    }
-
-    button:hover { transform: translateY(-2px); filter: brightness(1.1); }
-    button:active { transform: translateY(0); }
-
-    .divider {
-      display: flex;
-      align-items: center;
-      margin: 20px 0;
-      font-size: 0.8rem;
-      color: #64748b;
-      transform: translateZ(20px);
-    }
-    .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: #334155; margin: 0 10px; }
-    
-    #status {
-      text-align: center;
-      margin-top: 20px;
-      font-size: 0.9rem;
-      color: #94a3b8;
-      transform: translateZ(15px);
-    }
-  </style>
+  <title>Firebase Auth</title>
 </head>
 <body>
-</html>
+  <h2>Login / Register</h2>
+  
+  <input type="email" id="email" placeholder="Email" required><br><br>
+  <input type="password" id="password" placeholder="Password" required><br><br>
+  
+  <button id="btnRegister">Register</button>
+  <button id="btnLogin">Login</button>
+  
+  <p id="status"></p>
 
+  <script type="module">
+
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const statusText = document.getElementById('status');
+
+    // Handle Registration
+    document.getElementById('btnRegister').addEventListener('click', () => {
+      const email = emailInput.value;
+      const password = passwordInput.value;
+      
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          statusText.innerText = "Success! Registered as: " + userCredential.user.email;
+        })
+        .catch((error) => {
+          statusText.innerText = "Error: " + error.message;
+        });
+    });
+
+    // Handle Login
+    document.getElementById('btnLogin').addEventListener('click', () => {
+      const email = emailInput.value;
+      const password = passwordInput.value;
+      
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          statusText.innerText = "Success! Logged in as: " + userCredential.user.email;
+        })
+        .catch((error) => {
+          statusText.innerText = "Error: " + error.message;
+        });
+    });
+  </script>
+</body>
+</html>
