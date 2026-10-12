@@ -169,6 +169,49 @@
   <!-- Links perfectly to your separated app.js file -->
   <script type="module" src="app.js"></script>
 </body>
+  
+<h2>Create Account</h2>
+<form id="signupForm">
+  <input
+    id="signupEmail"
+    type="email"
+    placeholder="Email address"
+    required
+  />
+  <input
+    id="signupPassword"
+    type="password"
+    placeholder="Password (at least 6 characters)"
+    minlength="6"
+    required
+  />
+  <button type="submit">Register</button>
+</form>
+
+<hr />
+
+<h2>Login</h2>
+<form id="loginForm">
+  <input
+    id="loginEmail"
+    type="email"
+    placeholder="Email address"
+    required
+  />
+  <input
+    id="loginPassword"
+    type="password"
+    placeholder="Password"
+    required
+  />
+  <button type="submit">Login</button>
+</form>
+
+<p id="authStatus">Not logged in</p>
+<button id="logoutBtn" type="button">Logout</button>
+
+<script type="module" src="./firebase-auth.js"></script>
+
 
 </html>
 
