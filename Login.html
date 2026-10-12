@@ -2,57 +2,76 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Firebase Auth</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login & Register - 3D Museum</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #1e1e24;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .auth-container {
+      background-color: #2a2a35;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      width: 100%;
+      max-width: 360px;
+      text-align: center;
+    }
+    h2 { margin-bottom: 20px; font-weight: 600; }
+    input {
+      width: 90%;
+      padding: 12px;
+      margin: 8px 0;
+      border: 1px solid #444;
+      border-radius: 6px;
+      background-color: #1e1e24;
+      color: #fff;
+    }
+    button {
+      width: 98%;
+      padding: 12px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+    #loginBtn { background-color: #4CAF50; color: white; }
+    #registerBtn { background-color: #2196F3; color: white; }
+    #googleBtn { background-color: #df4930; color: white; }
+    button:hover { opacity: 0.9; }
+    #status {
+      margin-top: 15px;
+      font-size: 0.95rem;
+      color: #ccc;
+    }
+  </style>
 </head>
 <body>
-  <h2>Login / Register</h2>
-  
-  <input type="email" id="email" placeholder="Email" required><br><br>
-  <input type="password" id="password" placeholder="Password" required><br><br>
-  
-  <button id="btnRegister">Register</button>
-  <button id="btnLogin">Login</button>
-  
-  <p id="status"></p>
 
-  <script type="module">
+  <div class="auth-container">
+    <h2>3D Museum Auth</h2>
+    
+    <input type="email" id="email" placeholder="Email Address" required>
+    <input type="password" id="password" placeholder="Password" required>
+    
+    <button id="loginBtn">Sign In with Email</button>
+    <button id="registerBtn">Create Account (Register)</button>
+    <hr style="border: 0.5px solid #444; margin: 15px 0;">
+    <button id="googleBtn">Continue with Google (Gmail)</button>
+    
+    <p id="status">Loading authentication status...</p>
+  </div>
 
-
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    const emailInput = document.getElementById('email');
-    const passwordInput = document.getElementById('password');
-    const statusText = document.getElementById('status');
-
-    // Handle Registration
-    document.getElementById('btnRegister').addEventListener('click', () => {
-      const email = emailInput.value;
-      const password = passwordInput.value;
-      
-      createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          statusText.innerText = "Success! Registered as: " + userCredential.user.email;
-        })
-        .catch((error) => {
-          statusText.innerText = "Error: " + error.message;
-        });
-    });
-
-    // Handle Login
-    document.getElementById('btnLogin').addEventListener('click', () => {
-      const email = emailInput.value;
-      const password = passwordInput.value;
-      
-      signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          statusText.innerText = "Success! Logged in as: " + userCredential.user.email;
-        })
-        .catch((error) => {
-          statusText.innerText = "Error: " + error.message;
-        });
-    });
-  </script>
+  <!-- Ito ang magkokonekta sa iyong app.js -->
+  <script type="module" src="app.js"></script>
 </body>
 </html>
