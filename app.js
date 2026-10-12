@@ -74,3 +74,18 @@ document.getElementById("googleBtn").addEventListener("click", async () => {
     alert("Google Sign-in Error: " + error.message);
   }
 });
+// Log Out / End Session
+const logoutBtn = document.getElementById("logoutBtn");
+
+if (logoutBtn) {
+  logoutBtn.addEventListener("click", async () => {
+    try {
+      await signOut(auth);
+      alert("You have been logged out successfully!");
+      // Tandaan: Kusang magre-refresh ang 'onAuthStateChanged' 
+      // at ibabalik ang statusText sa "Please sign in to continue."
+    } catch (error) {
+      alert("Logout Error: " + error.message);
+    }
+  });
+}
