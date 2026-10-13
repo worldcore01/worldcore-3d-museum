@@ -1,447 +1,206 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="theme-color" content="#070b17">
-<title>WORLD CORE | 3D NFT Marketplace</title>
-<style>
-*{box-sizing:border-box}
-body{margin:0;overflow:hidden;background:#070b17;color:white;font-family:Arial,Helvetica,sans-serif}
-canvas{display:block}
-button,a{font:inherit;color:#fff;background:#10213b;border:1px solid #3e769b;border-radius:10px;padding:10px 13px;text-decoration:none;cursor:pointer}
-button:hover,a:hover{border-color:#55eaff}
-header{position:fixed;z-index:2;top:0;left:0;right:0;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(#040917eF,transparent);pointer-events:none}
-.logo{font-weight:900;letter-spacing:2px;font-size:17px}
-.logo span{color:#55eaff}
-nav{display:flex;gap:7px;pointer-events:auto}
-nav a{font-size:11px;padding:9px}
-#intro{position:fixed;top:82px;left:18px;width:min(300px,70vw);pointer-events:none;text-shadow:0 2px 10px #000}
-#intro small{color:#55eaff;letter-spacing:2px}
-#intro h1{font-size:clamp(25px,4vw,43px);line-height:1;margin:12px 0}
-#intro p{font-size:12px;color:#c0d0e7;line-height:1.5}
-#status{color:#8af5d6!important;letter-spacing:0!important}
-#crosshair{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);font-size:21px;color:#55eaff;pointer-events:none}
-#help{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);width:max-content;max-width:94vw;padding:10px 13px;border:1px solid #55eaff55;border-radius:12px;background:#071327eF;text-align:center;font-size:11px;color:#d9eaff;pointer-events:none}
-#interact{display:none;position:fixed;bottom:65px;left:50%;transform:translateX(-50%);z-index:3}
-#joy{display:none;position:fixed;bottom:75px;left:20px;width:110px;height:110px;border-radius:50%;border:2px solid #7ca5c5;background:#10213b99;touch-action:none;z-index:3}
-#knob{position:absolute;width:42px;height:42px;left:32px;top:32px;border-radius:50%;background:#55eaffbb}
-#lookhint{display:none;position:fixed;right:13px;bottom:83px;color:#c9d9ef;font-size:10px;pointer-events:none}
-#shade{display:none;position:fixed;inset:0;background:#020612d9;z-index:5;align-items:center;justify-content:center;padding:18px}
-#shade.open{display:flex}
-.panel{width:min(450px,100%);max-height:88vh;overflow:auto;padding:22px;border:1px solid #55eaff88;border-radius:20px;background:#091329;box-shadow:0 0 55px #176d9b30}
-.panel h2{margin:9px 0;color:#fff}
-.panel p{font-size:13px;line-height:1.6;color:#c1cfe3}
-#artimage{height:170px;border-radius:13px;margin:12px 0;background:radial-gradient(circle,#14618b,#12122e 65%,#080d1a);display:grid;place-items:center;font-size:54px;color:#55eaff}
-.tag{display:inline-block;padding:5px 8px;border-radius:7px;background:#162743;color:#79eaff;font-size:10px;letter-spacing:1px}
-#price{font-size:20px;font-weight:bold;margin:12px 0}
-.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:15px}
-.primary{background:#087da3;border-color:#55eaff;font-weight:bold}
-.note{font-size:11px!important;color:#a7bbd6!important}
-#error{display:none;position:fixed;z-index:9;bottom:75px;left:12px;right:12px;padding:12px;background:#451927;border-radius:10px;font-size:12px}
-@media(pointer:coarse){#joy,#lookhint{display:block}#intro{top:75px;left:12px;width:220px}#intro p{font-size:11px}#help{font-size:10px}header{padding:11px}}
-</style>
-<script type="importmap">
-{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js"}}
-</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vast Virtual 3D NFT Museum</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #050505;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        #info {
+            position: absolute;
+            top: 15px;
+            width: 100%;
+            text-align: center;
+            color: #ffffff;
+            font-size: 15px;
+            pointer-events: none;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.9);
+            letter-spacing: 0.5px;
+        }
+        #instructions {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            color: #888;
+            font-size: 13px;
+            pointer-events: none;
+        }
+    </style>
 </head>
 <body>
-<header>
-  <div class="logo">WORLD <span>CORE</span></div>
-  <nav>
-    <a href="./index.html">HOME</a>
-    <a href="./gallery.html">GALLERY</a>
-  </nav>
-</header>
+    <div id="info">🏛️ Vast 3D NFT Museum | Drag to look around, Scroll to zoom, WASD / Arrow keys to navigate</div>
+    <div id="instructions">Spacious Exhibition Hall with Real NFT & Digital Art Displays</div>
 
-<section id="intro">
-  <small>OPEN-WORLD NFT MARKETPLACE</small>
-  <h1>Explore. Collect. Connect.</h1>
-  <p>Walk through the digital museum, approach an exhibit and inspect its NFT.</p>
-  <p id="status">● MUSEUM READY</p>
-</section>
+    <!-- Include Three.js and OrbitControls via CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 
-<div id="crosshair">+</div>
-<button id="interact">Inspect NFT</button>
-<div id="joy"><div id="knob"></div></div>
-<div id="lookhint">DRAG HERE TO LOOK</div>
-<div id="help">WASD / ARROWS: MOVE · MOUSE: LOOK · E: INSPECT · CLICK TO CAPTURE MOUSE</div>
+    <script>
+        // =====================================================================
+        // 🏛️ MUSEUM CONFIGURATION & SPACIOUSNESS (Adjust these numbers anytime)
+        // =====================================================================
+        const roomWidth = 65;   // Width of the hall (Make it wider)
+        const roomHeight = 24;  // Cathedral ceiling height (Make it taller)
+        const roomLength = 350; // Length of the exhibition corridor (Make it longer)
 
-<div id="shade" role="dialog" aria-modal="true" aria-labelledby="artname">
-  <section class="panel">
-    <span class="tag" id="arttag">WORLD CORE EXHIBIT</span>
-    <div id="artimage">✧</div>
-    <h2 id="artname">Artwork</h2>
-    <p id="artdesc"></p>
-    <div id="price"></div>
-    <p class="note" id="modeNote"></p>
-    <div class="actions">
-      <button class="primary" id="buy">Demo purchase</button>
-      <button id="wallet">Connect wallet</button>
-      <button id="close">Return to museum</button>
-    </div>
-    <p class="note">Never approve a transaction you do not understand. Real purchases require a verified marketplace contract and an NFT listing that belongs to the WORLD CORE collection.</p>
-  </section>
-</div>
-<div id="error"></div>
+        // 1. Scene Setup
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x0a0a0c);
+        scene.fog = new THREE.FogExp2(0x0a0a0c, 0.006); // Atmospheric depth fog
 
-<script type="module">
-import * as THREE from "three";
-import { ethers } from "https://cdn.jsdelivr.net/npm/ethers@6.15.0/+esm";
+        const camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 5, 45);
 
-/*
- REAL MARKETPLACE SETUP — IMPORTANT
- ----------------------------------
- This code starts in DEMO MODE.
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        document.body.appendChild(renderer.domElement);
 
- To enable real purchases, you must deploy or select a verified Base
- marketplace contract that exposes this exact payable function:
+        // Controls
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.maxPolarAngle = Math.PI / 2 - 0.01; // Prevent going below ground
+        controls.minDistance = 3;
+        controls.maxDistance = 180;
 
-     function buy(uint256 tokenId) external payable;
+        // 2. Lighting Setup
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.35);
+        scene.add(ambientLight);
 
- The function must check the actual listing price, transfer the NFT to
- the buyer, and pay the seller safely. Its ABI and behavior must match.
+        const ceilingLight = new THREE.DirectionalLight(0xffffff, 0.5);
+        ceilingLight.position.set(0, roomHeight - 2, 0);
+        ceilingLight.castShadow = true;
+        scene.add(ceilingLight);
 
- Set MARKETPLACE_ADDRESS to that deployed contract address and change
- the appropriate artwork entry to real:true with its real tokenId and
- priceWei. Do not enable real:true for sample/demo artworks.
+        // 3. Architecture Construction (Spacious Walls, Floor, & Ceiling)
+        const floorGeo = new THREE.PlaneGeometry(roomWidth, roomLength);
+        const floorMat = new THREE.MeshStandardMaterial({ color: 0x121215, roughness: 0.15, metalness: 0.85 });
+        const floor = new THREE.Mesh(floorGeo, floorMat);
+        floor.rotation.x = -Math.PI / 2;
+        floor.receiveShadow = true;
+        scene.add(floor);
 
- This generic example is not a deployed marketplace contract.
-*/
-const MARKETPLACE_ADDRESS = "";
-const MARKETPLACE_ABI = [
-  "function buy(uint256 tokenId) payable"
-];
+        const ceilingMat = new THREE.MeshStandardMaterial({ color: 0x0a0a0e, roughness: 0.9 });
+        const ceiling = new THREE.Mesh(floorGeo, ceilingMat);
+        ceiling.rotation.x = Math.PI / 2;
+        ceiling.position.y = roomHeight;
+        scene.add(ceiling);
 
-const artworks = [
-  {name:"Genesis of World Core",desc:"A digital vision of connection, creativity and a shared universe.",color:0x18d9ff,price:"0.005",real:false},
-  {name:"Infinite Dimensions",desc:"A conceptual collectible exploring endless digital possibility.",color:0x9864ff,price:"0.008",real:false},
-  {name:"Golden Horizon",desc:"An artwork representing discovery and a new digital frontier.",color:0xffbb55,price:"0.006",real:false},
-  {name:"Nebula Dreams",desc:"Color, light and imagination in a virtual universe.",color:0xff55c8,price:"0.004",real:false},
-  {name:"Core Energy",desc:"A visual celebration of creativity and connection.",color:0x56ffd0,price:"0.009",real:false},
-  {name:"New Horizon",desc:"A futuristic collectible from the WORLD CORE exhibition.",color:0x628cff,price:"0.007",real:false},
-  {name:"Digital Universe",desc:"An abstract journey through an infinite digital world.",color:0xff6969,price:"0.01",real:false},
-  {name:"Beyond the Core",desc:"A concept piece inspired by the future of digital ownership.",color:0xd8eaff,price:"0.003",real:false}
-];
+        const wallGeo = new THREE.PlaneGeometry(roomLength, roomHeight);
+        const wallMat = new THREE.MeshStandardMaterial({ color: 0x1a1a20, roughness: 0.8 });
+        
+        const leftWall = new THREE.Mesh(wallGeo, wallMat);
+        leftWall.rotation.y = Math.PI / 2;
+        leftWall.position.set(-roomWidth / 2, roomHeight / 2, 0);
+        scene.add(leftWall);
 
-// Example for a verified listing, after confirming the deployed contract:
-// {name:"Real WCORE NFT #1", desc:"Verified collection item.", color:0x18d9ff,
-//  real:true, tokenId:"1", priceWei:"5000000000000000"}
+        const rightWall = new THREE.Mesh(wallGeo, wallMat);
+        rightWall.rotation.y = -Math.PI / 2;
+        rightWall.position.set(roomWidth / 2, roomHeight / 2, 0);
+        scene.add(rightWall);
 
-const root=document.body;
-const scene=new THREE.Scene();
-scene.background=new THREE.Color(0x050916);
-scene.fog=new THREE.FogExp2(0x050916,0.0028);
+        // 4. NFT Display Loader Function
+        const textureLoader = new THREE.TextureLoader();
+        textureLoader.crossOrigin = 'anonymous'; // Ensures external NFT images load safely
 
-const camera=new THREE.PerspectiveCamera(75,innerWidth/innerHeight,.1,1200);
-camera.rotation.order="YXZ";
-camera.position.set(0,2,12);
+        function createNFTDisplay(imageUrl, x, y, z, rotationY) {
+            // Elegant Museum Frame Border
+            const frameWidth = 6.5;
+            const frameHeight = 8;
+            const frameGeo = new THREE.BoxGeometry(frameWidth, frameHeight, 0.35);
+            const frameMat = new THREE.MeshStandardMaterial({ color: 0x222226, roughness: 0.4, metalness: 0.7 });
+            const frame = new THREE.Mesh(frameGeo, frameMat);
+            frame.position.set(x, y, z);
+            frame.rotation.y = rotationY;
+            scene.add(frame);
 
-const renderer=new THREE.WebGLRenderer({antialias:true});
-renderer.setSize(innerWidth,innerHeight);
-renderer.setPixelRatio(Math.min(devicePixelRatio,1.6));
-renderer.outputColorSpace=THREE.SRGBColorSpace;
-renderer.toneMapping=THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure=1.12;
-root.prepend(renderer.domElement);
-renderer.domElement.style.touchAction="none";
+            // NFT Art Plane Inside Frame
+            const artGeo = new THREE.PlaneGeometry(frameWidth - 0.5, frameHeight - 0.5);
+            
+            textureLoader.load(imageUrl, 
+                (texture) => {
+                    const artMat = new THREE.MeshBasicMaterial({ map: texture });
+                    const art = new THREE.Mesh(artGeo, artMat);
+                    
+                    if (Math.abs(rotationY - Math.PI / 2) < 0.1) {
+                        art.position.set(x - 0.19, y, z);
+                    } else {
+                        art.position.set(x + 0.19, y, z);
+                    }
+                    art.rotation.y = rotationY;
+                    scene.add(art);
+                },
+                undefined,
+                (err) => {
+                    console.warn("Failed to load NFT asset URL:", imageUrl);
+                }
+            );
 
-scene.add(new THREE.HemisphereLight(0x9acbff,0x101024,2));
-const ambient=new THREE.PointLight(0x1a9cff,100,220);
-ambient.position.set(0,18,0);scene.add(ambient);
+            // Spotlight shining down on the NFT display
+            const spotLight = new THREE.SpotLight(0xfff3e0, 1.8);
+            if (Math.abs(rotationY - Math.PI / 2) < 0.1) {
+                spotLight.position.set(x + 6, roomHeight - 2, z);
+            } else {
+                spotLight.position.set(x - 6, roomHeight - 2, z);
+            }
+            spotLight.angle = Math.PI / 4;
+            spotLight.penumbra = 0.5;
+            scene.add(spotLight);
+        }
 
-function block(w,h,d,x,y,z,color,emissive=0){
- const mesh=new THREE.Mesh(
-  new THREE.BoxGeometry(w,h,d),
-  new THREE.MeshStandardMaterial({color,metalness:.5,roughness:.38,emissive,emissiveIntensity:.7})
- );
- mesh.position.set(x,y,z);scene.add(mesh);return mesh;
-}
-function lamp(x,y,z,color,power=5,range=25){
- const l=new THREE.PointLight(color,power,range);
- l.position.set(x,y,z);scene.add(l);
-}
+        // =====================================================================
+        // 🖼️ REAL NFT / DIGITAL ART COLLECTION URLS
+        // =====================================================================
+        // Replace these URLs with your real NFT image links (PNG, JPEG, IPFS links, etc.)
+        const realNFTs = [
+            "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1000",
+            "https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?w=1000",
+            "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=1000",
+            "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=1000",
+            "https://images.unsplash.com/photo-1633167606207-d840b5070fc2?w=1000",
+            "https://images.unsplash.com/photo-1614064641938-3bbee52942c7?w=1000",
+            "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=1000",
+            "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=1000",
+            "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1000",
+            "https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?w=1000"
+        ];
 
-const floor=new THREE.Mesh(
- new THREE.PlaneGeometry(600,600),
- new THREE.MeshStandardMaterial({color:0x10192b,metalness:.35,roughness:.5})
-);
-floor.rotation.x=-Math.PI/2;scene.add(floor);
-const grid=new THREE.GridHelper(600,150,0x147ba0,0x172846);
-grid.position.y=.025;scene.add(grid);
+        // Layout the NFTs down both sides of the huge corridor automatically
+        let zPos = -140;
+        const spacing = 40; // Distance spacing between frames
 
-// Large open museum campus.
-for(let x=-100;x<=100;x+=20){
- for(let z=-100;z<=100;z+=20){
-  if(Math.abs(x)<15&&Math.abs(z)<15)continue;
-  block(.8,5,.8,x,2.5,z,0x172d49);
-  block(1,.12,1,x,5.08,z,0x23dfff,0x23dfff);
- }
-}
-for(let z=-80;z<=80;z+=40){
- for(const side of [-1,1]){
-  block(1,8,42,side*25,4,z,0x15243d);
-  block(1.1,.15,42,side*25,8,z,0x25dfff,0x25dfff);
- }
- block(52,.45,.8,0,8,z,0x1b3557);
- lamp(0,7,z,0x236bff,6,40);
-}
+        for (let i = 0; i < realNFTs.length; i++) {
+            if (i % 2 === 0) {
+                // Left Wall
+                createNFTDisplay(realNFTs[i], -roomWidth / 2 + 0.2, 5.5, zPos, Math.PI / 2);
+            } else {
+                // Right Wall
+                createNFTDisplay(realNFTs[i], roomWidth / 2 - 0.2, 5.5, zPos, -Math.PI / 2);
+                zPos += spacing; // Step forward down the hall for the next pair
+            }
+        }
 
-// Central portal.
-block(1,12,1,-7,6,-18,0x16426b,0x073d69);
-block(1,12,1,7,6,-18,0x16426b,0x073d69);
-block(15,.6,1,0,12,-18,0x25dfff,0x25dfff);
-lamp(0,6,-18,0x1a78ff,15,40);
+        // 6. Handle Browser Window Resizing
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
 
-// Stars.
-const points=[];
-for(let i=0;i<1800;i++)points.push((Math.random()-.5)*500,Math.random()*55+5,(Math.random()-.5)*500);
-const starsGeo=new THREE.BufferGeometry();
-starsGeo.setAttribute("position",new THREE.Float32BufferAttribute(points,3));
-scene.add(new THREE.Points(starsGeo,new THREE.PointsMaterial({color:0x9edfff,size:.12})));
-
-// Make illustrated exhibit textures without external image files.
-function textureFor(art){
- const c=document.createElement("canvas");c.width=512;c.height=640;
- const ctx=c.getContext("2d");
- const color="#"+art.color.toString(16).padStart(6,"0");
- const g=ctx.createLinearGradient(0,0,512,640);
- g.addColorStop(0,"#071326");g.addColorStop(.55,color);g.addColorStop(1,"#10142c");
- ctx.fillStyle=g;ctx.fillRect(0,0,512,640);
- for(let i=0;i<15;i++){
-  ctx.beginPath();ctx.arc(256,265,18+i*12,0,Math.PI*2);
-  ctx.strokeStyle=color+"aa";ctx.lineWidth=3;ctx.stroke();
- }
- ctx.textAlign="center";ctx.fillStyle="#ffffff";
- ctx.font="bold 29px Arial";ctx.fillText("WORLD CORE",256,530);
- ctx.font="bold 21px Arial";ctx.fillText(art.name.toUpperCase().slice(0,24),256,570);
- const tex=new THREE.CanvasTexture(c);tex.colorSpace=THREE.SRGBColorSpace;return tex;
-}
-
-const exhibits=[];
-artworks.forEach((art,i)=>{
- const hall=Math.floor(i/2);
- const side=i%2===0?-1:1;
- const x=side*12;
- const z=-42+hall*22;
-
- // Raised pedestal.
- const pedestal=block(4,.8,3,x,.4,z,0x15233b,0x051a2a);
- const trim=block(4.05,.08,3.05,x,.83,z,art.color,art.color);
- const frame=block(4.5,5.5,.35,x,4,z,0x122543,art.color);
- const picture=new THREE.Mesh(
-  new THREE.PlaneGeometry(3.7,4.7),
-  new THREE.MeshBasicMaterial({map:textureFor(art)})
- );
- picture.position.set(x,4,z+.205);
- scene.add(picture);
- const edge=block(4.6,.09,.09,x,6.8,z+.24,art.color,art.color);
- lamp(x,4,z+2,art.color,4,18);
- exhibits.push({art,objects:[pedestal,trim,frame,picture,edge],position:new THREE.Vector3(x,2,z)});
-});
-
-// Add more distant architectural lights to make the campus feel large.
-for(let i=0;i<32;i++){
- const x=(i%8)*28-98,z=Math.floor(i/8)*45-75;
- block(2,.2,2,x,.1,z,0x1c4360,0x073e56);
- lamp(x,1,z,0x157dff,2,15);
-}
-
-const raycaster=new THREE.Raycaster();
-const center=new THREE.Vector2(0,0);
-const keys={};
-let yaw=0,pitch=0;
-let locked=false,selected=null;
-let joy={x:0,y:0},joyPointer=null;
-let touchLook=null;
-let lastTouchX=0,lastTouchY=0;
-const shade=document.getElementById("shade");
-const interact=document.getElementById("interact");
-const status=document.getElementById("status");
-const errorBox=document.getElementById("error");
-
-function showError(message){
- errorBox.textContent=message;errorBox.style.display="block";
- setTimeout(()=>errorBox.style.display="none",5000);
-}
-function setLook(dx,dy){
- yaw-=dx*.0022;
- pitch-=dy*.0022;
- pitch=Math.max(-1.35,Math.min(1.35,pitch));
- camera.rotation.set(pitch,yaw,0);
-}
-function nearestExhibit(){
- let best=null,bestDist=Infinity;
- for(const e of exhibits){
-  const dist=camera.position.distanceTo(e.position);
-  if(dist<bestDist&&dist<11){
-   const direction=e.position.clone().sub(camera.position).normalize();
-   const forward=new THREE.Vector3(0,0,-1).applyQuaternion(camera.quaternion);
-   if(forward.dot(direction)>.68){best=e;bestDist=dist;}
-  }
- }
- return best;
-}
-function inspect(e){
- if(!e)return;
- selected=e;
- document.getElementById("artname").textContent=e.art.name;
- document.getElementById("artdesc").textContent=e.art.desc;
- document.getElementById("artimage").style.background=
-  "radial-gradient(circle,#"+e.art.color.toString(16).padStart(6,"0")+",#12122e 68%,#080d1a)";
- document.getElementById("arttag").textContent=e.art.real?"WORLD CORE · ON-CHAIN LISTING":"WORLD CORE · DEMO EXHIBIT";
- if(e.art.real&&e.art.priceWei){
-  document.getElementById("price").textContent=ethers.formatEther(e.art.priceWei)+" ETH on Base";
-  document.getElementById("buy").textContent="Buy NFT on Base";
-  document.getElementById("modeNote").textContent="REAL LISTING: transaction requires a verified marketplace contract and wallet confirmation.";
- }else{
-  document.getElementById("price").textContent=e.art.price+" ETH · DEMO PRICE";
-  document.getElementById("buy").textContent="Demo purchase — no charge";
-  document.getElementById("modeNote").textContent="DEMO MODE: this is a sample exhibit, not a verified on-chain listing. No money will be charged and no NFT will be transferred.";
- }
- shade.classList.add("open");
- if(document.pointerLockElement)document.exitPointerLock();
-}
-document.getElementById("close").onclick=()=>shade.classList.remove("open");
-shade.addEventListener("click",e=>{if(e.target===shade)shade.classList.remove("open")});
-interact.onclick=()=>inspect(nearestExhibit());
-
-renderer.domElement.addEventListener("click",()=>{
- if(shade.classList.contains("open"))return;
- if(!("ontouchstart" in window)&&!locked)renderer.domElement.requestPointerLock?.();
-});
-document.addEventListener("pointerlockchange",()=>{locked=document.pointerLockElement===renderer.domElement;});
-document.addEventListener("mousemove",e=>{if(locked&&!shade.classList.contains("open"))setLook(e.movementX,e.movementY);});
-
-document.addEventListener("keydown",e=>{
- keys[e.key.toLowerCase()]=true;
- if(["arrowup","arrowdown","arrowleft","arrowright"," "].includes(e.key.toLowerCase()))e.preventDefault();
- if(e.key.toLowerCase()==="e"&&!shade.classList.contains("open"))inspect(nearestExhibit());
- if(e.key==="Escape"&&shade.classList.contains("open"))shade.classList.remove("open");
-});
-document.addEventListener("keyup",e=>keys[e.key.toLowerCase()]=false);
-
-// Touch joystick for walking; drag the right side of the screen to look.
-const joyEl=document.getElementById("joy"),knob=document.getElementById("knob");
-joyEl.addEventListener("pointerdown",e=>{joyPointer=e.pointerId;joyEl.setPointerCapture(e.pointerId);moveJoy(e);});
-joyEl.addEventListener("pointermove",e=>{if(e.pointerId===joyPointer)moveJoy(e);});
-function moveJoy(e){
- const r=joyEl.getBoundingClientRect();
- const dx=e.clientX-(r.left+r.width/2),dy=e.clientY-(r.top+r.height/2);
- const max=35,len=Math.hypot(dx,dy)||1,k=Math.min(1,max/len);
- joy.x=dx/35*k;joy.y=dy/35*k;
- knob.style.left=(32+joy.x*30)+"px";knob.style.top=(32+joy.y*30)+"px";
-}
-function releaseJoy(){joyPointer=null;joy.x=0;joy.y=0;knob.style.left="32px";knob.style.top="32px";}
-joyEl.addEventListener("pointerup",releaseJoy);
-joyEl.addEventListener("pointercancel",releaseJoy);
-
-renderer.domElement.addEventListener("pointerdown",e=>{
- if(e.pointerType==="touch"&&e.clientX>innerWidth*.42){
-  touchLook=e.pointerId;lastTouchX=e.clientX;lastTouchY=e.clientY;
-  renderer.domElement.setPointerCapture(e.pointerId);
- }
-});
-renderer.domElement.addEventListener("pointermove",e=>{
- if(e.pointerId===touchLook){
-  setLook(e.clientX-lastTouchX,e.clientY-lastTouchY);
-  lastTouchX=e.clientX;lastTouchY=e.clientY;
- }
-});
-renderer.domElement.addEventListener("pointerup",e=>{if(e.pointerId===touchLook)touchLook=null;});
-renderer.domElement.addEventListener("pointercancel",()=>touchLook=null);
-
-// Wallet connection and Base network check.
-let walletProvider=null,walletSigner=null;
-async function connectWallet(){
- if(!window.ethereum){
-  showError("No compatible wallet detected. Open this site in a wallet-enabled browser.");
-  return false;
- }
- try{
-  walletProvider=new ethers.BrowserProvider(window.ethereum);
-  await walletProvider.send("eth_requestAccounts",[]);
-  const network=await walletProvider.getNetwork();
-  if(network.chainId!==8453n){
-   try{
-    await window.ethereum.request({method:"wallet_switchEthereumChain",params:[{chainId:"0x2105"}]});
-   }catch(err){
-    if(err.code===4902){
-     await window.ethereum.request({method:"wallet_addEthereumChain",params:[{
-      chainId:"0x2105",chainName:"Base",nativeCurrency:{name:"Ether",symbol:"ETH",decimals:18},
-      rpcUrls:["https://mainnet.base.org"],blockExplorerUrls:["https://basescan.org"]
-     }]});
-    }else throw err;
-   }
-   walletProvider=new ethers.BrowserProvider(window.ethereum);
-  }
-  walletSigner=await walletProvider.getSigner();
-  const address=await walletSigner.getAddress();
-  document.getElementById("wallet").textContent=address.slice(0,6)+"…"+address.slice(-4);
-  status.textContent="● WALLET CONNECTED · BASE";
-  return true;
- }catch(err){
-  showError(err.shortMessage||err.message||"Wallet connection cancelled.");
-  return false;
- }
-}
-document.getElementById("wallet").onclick=connectWallet;
-
-document.getElementById("buy").onclick=async()=>{
- if(!selected)return;
- const art=selected.art;
-
- // Demo items NEVER call a contract or send funds.
- if(!art.real){
-  alert("DEMO PURCHASE ONLY\n\nThis exhibit is a preview. No transaction was sent, no ETH was charged and no NFT was transferred.");
-  return;
- }
-
- // Real purchases are blocked unless the marketplace is explicitly configured.
- if(!ethers.isAddress(MARKETPLACE_ADDRESS)){
-  showError("Real buying is disabled: configure a verified Base marketplace contract first.");
-  return;
- }
- if(!art.tokenId||!art.priceWei){
-  showError("This item has no complete on-chain listing configuration.");
-  return;
- }
- if(!await connectWallet())return;
-
- try{
-  const network=await walletProvider.getNetwork();
-  if(network.chainId!==8453n){
-   showError("Please switch your wallet to Base Mainnet.");
-   return;
-  }
-  const contract=new ethers.Contract(MARKETPLACE_ADDRESS,MARKETPLACE_ABI,walletSigner);
-  const price=BigInt(art.priceWei);
-  if(!confirm("You are about to submit a REAL Base transaction.\n\nNFT: "+art.name+"\nPrice: "+ethers.formatEther(price)+" ETH\n\nConfirm only if you have verified the listing and contract."))return;
-  const tx=await contract.buy(art.tokenId,{value:price});
-  showError("Transaction submitted: "+tx.hash);
-  const receipt=await tx.wait();
-  if(receipt.status===1){
-   alert("Transaction confirmed on Base. Verify the NFT ownership and transaction on BaseScan before assuming the purchase is complete.");
-  }else{
-   showError("The transaction failed on-chain.");
-  }
- }catch(err){
-  showError(err.shortMessage||err.reason||err.message||"Purchase failed.");
- }
-};
-
-const clock=new THREE.Clock();
-const velocity=new THREE.Vector3();
-function animate(){
- requestAnimationFrame(animate);
- const dt=Math.min(clock.getDelta(),.05);
- if(!shade.classList.contains("open")){
-  const forward=new THREE.Vector3(0,0,-1).applyAxisAngle(new THREE.Vector3(0,1,0),yaw);
-  const right=new THREE.Vector3(1,0,0).applyAxisAngle(new THREE.Vector3(0,1,0),yaw);
-  velocity.set(0,0,0);
-  if(keys.w||keys.arrowup)velocity.add(forward);
-  if(keys.s||keys.arrowdown)velocity.sub(forward);
-  if(keys.d||keys.arrowright)velocity.add(right);
-  if(keys.a||keys.arrowleft)velocity.sub(right);
- }
-   
+        // 7. Animation / Render Loop
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+        animate();
+    </script>
+</body>
+</html>
